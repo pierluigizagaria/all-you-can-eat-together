@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "1001091297631",
+    "project_id": "all-you-can-eat-together",
+    "storage_bucket": "all-you-can-eat-together.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1001091297631:android:dc3ef4838a395dbb65c6ea",
+        "android_client_info": {
+          "package_name": "it.pierluigizagaria.allyoucaneattogether"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1001091297631-675jvbp7291siju6be0a59m0ffn20k9h.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyADw4iZY3spKcuL0z4NcvnRbXhWw1CRAVc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1001091297631-675jvbp7291siju6be0a59m0ffn20k9h.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
