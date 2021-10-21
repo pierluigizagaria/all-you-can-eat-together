@@ -1,18 +1,29 @@
 import 'package:allyoucaneattogether/models/user.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 
 class Order {
-  final UserData user;
+  final String? uid;
+  final User user;
   final Color color;
   final List<int> items;
 
-  Order({required this.user, required this.color, required this.items});
+  Order({
+    required this.user,
+    required this.color,
+    this.uid,
+    this.items = const [],
+  });
 
-  factory Order.fromJson(json) => _orderFromJson(json);
+  factory Order.fromJson(uid, json) => _orderFromJson(uid, json);
 
-  static Order _orderFromJson(Map<String, dynamic> json) {
+  factory Order.fromSnapshot(DocumentSnapshot snapshot) => Order.fromJson(
+      snapshot.reference.id, snapshot.data() as Map<String, dynamic>);
+
+  static Order _orderFromJson(String uid, Map<String, dynamic> json) {
     return Order(
-      user: UserData(name: 'name', uid: '1'),
+      uid: uid,
+      user: User(uid: json['user']),
       color: Color(json['color'] as int),
       items: List.castFrom(json['items']),
     );
@@ -21,7 +32,7 @@ class Order {
   Map<String, dynamic> toJson() => _orderToJson(this);
 
   Map<String, dynamic> _orderToJson(Order instance) => <String, dynamic>{
-        'user': 'null',
+        'user': instance.user.uid,
         'color': instance.color.value,
         'items': instance.items,
       };

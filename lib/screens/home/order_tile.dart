@@ -41,10 +41,15 @@ class _OrderTileState extends State<OrderTile> {
                   widget._order.items.length,
                   (int index) {
                     return Chip(
-                      labelStyle: const TextStyle(fontSize: 18),
-                      backgroundColor: widget._order.color.withOpacity(0.2),
+                      labelStyle: const TextStyle(
+                        fontSize: 18,
+                        color: Colors.white,
+                      ),
+                      backgroundColor: widget._order.color,
                       materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                      label: Text(widget._order.items[index].toString()),
+                      label: Text(
+                        widget._order.items[index].toString(),
+                      ),
                     );
                   },
                 ),

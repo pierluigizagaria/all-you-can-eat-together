@@ -1,4 +1,4 @@
-import 'package:allyoucaneattogether/models/group.dart';
+import 'package:allyoucaneattogether/models/order.dart';
 import 'package:flutter/material.dart';
 import 'package:allyoucaneattogether/screens/home/order_tile.dart';
 import 'package:provider/provider.dart';
@@ -8,7 +8,7 @@ class OrdersList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final _orders = Provider.of<Group?>(context)?.orders ?? [];
+    final _orders = Provider.of<List<Order>>(context);
 
     return ListView.builder(
       itemCount: _orders.length,

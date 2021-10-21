@@ -2,26 +2,26 @@ import 'package:allyoucaneattogether/models/group.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class GroupRepository {
-  final CollectionReference collection =
+  final CollectionReference _collection =
       FirebaseFirestore.instance.collection('groups');
 
-  Future<Group> create() async {
-    return await collection
+  Future<Group> create() {
+    return _collection
         .add(Group().toJson())
         .then((ref) => ref.get())
         .then((doc) => Group.fromSnapshot(doc));
   }
 
-  void update(Group group) async {
-    await collection.doc(group.uid).update(group.toJson());
+  Future<void> update(Group group) {
+    return _collection.doc(group.uid).update(group.toJson());
   }
 
-  void delete(Group group) async {
-    await collection.doc(group.uid).delete();
+  Future<void> delete(Group group) {
+    return _collection.doc(group.uid).delete();
   }
 
-  Future<Group?> getGroupByCode(String code) async {
-    return await collection
+  Future<Group?> getGroupByCode(String code) {
+    return _collection
         .where('code', isEqualTo: code)
         .limit(1)
         .get()
@@ -32,7 +32,7 @@ class GroupRepository {
   }
 
   Stream<Group?> getGroupStream(Group group) {
-    return collection
+    return _collection
         .doc(group.uid)
         .snapshots()
         .map((snapshot) => Group.fromSnapshot(snapshot));

@@ -1,9 +1,9 @@
-import 'package:allyoucaneattogether/models/group.dart';
-import 'package:allyoucaneattogether/repository/groups.dart';
-import 'package:allyoucaneattogether/screens/orders/orders.dart';
-import 'package:allyoucaneattogether/utils/upper_text_formatter.dart';
+import 'dart:io';
+
+import 'package:allyoucaneattogether/widgets/group_code_text_field.dart';
+import 'package:qr_code_scanner/qr_code_scanner.dart';
+import 'package:qr_flutter/qr_flutter.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({Key? key}) : super(key: key);
@@ -11,74 +11,95 @@ class HomeScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      child: Scaffold(
-        appBar: AppBar(
-          title: const Text('Home'),
-          elevation: 0,
-        ),
-        body: Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              SizedBox(
-                height: 150,
-                width: 120,
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: const [GroupCodeTextField()],
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Home'),
+        elevation: 0,
+      ),
+      body: SingleChildScrollView(
+        child: Column(
+          children: [
+            Stack(
+              alignment: AlignmentDirectional.center,
+              children: [
+                const AspectRatio(
+                  aspectRatio: 1,
+                  child: GroupQRCodeScanner(),
                 ),
-              ),
-              ElevatedButton(
-                child: Text('Crea gruppo'),
-                onPressed: () {
-                  GroupRepository().create();
-                },
-              )
-            ],
-          ),
+                ClipRRect(
+                  borderRadius: BorderRadius.circular(8.0),
+                  child: QrImage(
+                    backgroundColor: Colors.white.withOpacity(0.3),
+                    data: "1234567890",
+                    version: QrVersions.auto,
+                    size: 240.0,
+                  ),
+                ),
+              ],
+            ),
+            Container(
+              width: 240,
+              child: GroupCodeTextField(),
+            )
+          ],
         ),
       ),
     );
   }
 }
 
-class GroupCodeTextField extends StatefulWidget {
-  const GroupCodeTextField({Key? key}) : super(key: key);
+class GroupQRCodeScanner extends StatefulWidget {
+  const GroupQRCodeScanner({Key? key}) : super(key: key);
 
   @override
-  _GroupCodeTextFieldState createState() => _GroupCodeTextFieldState();
+  State<StatefulWidget> createState() => _GroupQRCodeScannerState();
 }
 
-class _GroupCodeTextFieldState extends State<GroupCodeTextField> {
-  String _oldInputValue = '';
-  String _error = '';
+class _GroupQRCodeScannerState extends State<GroupQRCodeScanner> {
+  final GlobalKey qrKey = GlobalKey(debugLabel: 'QR');
+  QRViewController? controller;
+
+  void _onQRViewCreated(QRViewController controller) {
+    setState(() => this.controller = controller);
+    controller.scannedDataStream.listen(_onScannedData);
+  }
+
+  void _onPermissionSet(
+    BuildContext context,
+    QRViewController controller,
+    bool hasPermission,
+  ) {
+    if (!hasPermission) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Non è possibile accedere alla fotocamera')),
+      );
+    }
+  }
+
+  void _onScannedData(Barcode barcode) {}
+
+  @override
+  void reassemble() {
+    super.reassemble();
+    if (Platform.isAndroid) {
+      controller!.pauseCamera();
+    }
+    controller!.resumeCamera();
+  }
+
+  @override
+  void dispose() {
+    controller?.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
-    return TextField(
-      style: const TextStyle(fontSize: 32),
-      textAlign: TextAlign.center,
-      maxLength: Group.codeLength,
-      inputFormatters: [
-        UpperCaseTextFormatter(),
-        FilteringTextInputFormatter.allow(RegExp('^[a-zA-Z0-9]*')),
-      ],
-      decoration: InputDecoration(errorText: _error, counterText: ''),
-      onChanged: (value) async {
-        if (value == _oldInputValue) {
-          return;
-        } else {
-          _oldInputValue = value;
-          setState(() => _error = '');
-        }
-        if (value.length < Group.codeLength) return;
-        Group? group = await GroupRepository().getGroupByCode(value);
-        if (group == null) {
-          setState(() => _error = 'Group does not exists');
-          return;
-        }
-        Navigator.pushNamed(context, OrdersScreen.routeName, arguments: group);
+    return QRView(
+      key: qrKey,
+      onQRViewCreated: _onQRViewCreated,
+      onPermissionSet: (controller, hasPermission) {
+        return _onPermissionSet(context, controller, hasPermission);
       },
     );
   }

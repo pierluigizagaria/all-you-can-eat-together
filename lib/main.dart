@@ -1,85 +1,55 @@
-import 'package:allyoucaneattogether/models/group.dart';
-import 'package:allyoucaneattogether/screens/home/home.dart';
-import 'package:allyoucaneattogether/screens/orders/orders.dart';
+import 'package:allyoucaneattogether/models/user.dart';
+import 'package:allyoucaneattogether/pages/loading.dart';
+import 'package:allyoucaneattogether/router.dart';
+import 'package:allyoucaneattogether/services/auth.dart';
+import 'package:allyoucaneattogether/themes.dart';
+import 'package:allyoucaneattogether/widgets/flutter_initializer.dart';
 import 'package:flutter/material.dart';
-import 'package:firebase_core/firebase_core.dart';
+import 'package:provider/provider.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
-  runApp(const FirebaseWrapper());
-}
-
-class FirebaseWrapper extends StatefulWidget {
-  const FirebaseWrapper({Key? key}) : super(key: key);
-
-  @override
-  _FirebaseWrapperState createState() => _FirebaseWrapperState();
-}
-
-class _FirebaseWrapperState extends State<FirebaseWrapper> {
-  bool _initialized = false;
-  bool _error = false;
-
-  void initializeFlutterFire() async {
-    try {
-      await Firebase.initializeApp();
-      setState(() => _initialized = true);
-    } catch (e) {
-      setState(() => _error = true);
-    }
-  }
-
-  @override
-  void initState() {
-    initializeFlutterFire();
-    super.initState();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    if (_error) {
-      return MaterialApp(
-        title: 'Errore',
-        home: Center(
-          child: Container(
-            color: Colors.orange,
-          ),
-        ),
-      );
-    }
-
-    if (!_initialized) {
-      return MaterialApp(
-        title: 'Loading',
-        home: Center(
-          child: Container(
-            color: Colors.orange,
-          ),
-        ),
-      );
-    }
-
-    return const App();
-  }
+  runApp(App());
 }
 
 class App extends StatelessWidget {
-  const App({Key? key}) : super(key: key);
+  final GlobalKey<NavigatorState> _navigatorKey = GlobalKey<NavigatorState>();
+
+  App({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Flutter Demo',
-      theme: ThemeData(
-        primarySwatch: Colors.deepOrange,
-        appBarTheme: const AppBarTheme(elevation: 0),
-      ),
-      initialRoute: HomeScreen.routeName,
-      routes: {
-        HomeScreen.routeName: (context) => const HomeScreen(),
-        OrdersScreen.routeName: (context) => OrdersScreen(
-              group: ModalRoute.of(context)!.settings.arguments as Group?,
-            )
+    return FirebaseInitializer(
+      onError: (context) {
+        return MaterialApp(
+          title: 'Flutter Demo',
+          theme: Themes.lightTheme,
+          home: Loading(),
+        );
+      },
+      onLoading: (context) {
+        return MaterialApp(
+          title: 'Flutter Demo',
+          theme: Themes.lightTheme,
+          home: Loading(),
+        );
+      },
+      onDidInitilize: (context) {
+        return StreamProvider<User?>.value(
+          initialData: AuthService().signedUser(),
+          value: AuthService().user,
+          updateShouldNotify: (previous, current) {
+            return current?.uid != previous?.uid;
+          },
+          child: MaterialApp(
+            title: 'Flutter Demo',
+            theme: Themes.lightTheme,
+            darkTheme: Themes.darkTheme,
+            themeMode: ThemeMode.system,
+            navigatorKey: _navigatorKey,
+            onGenerateRoute: AppRouter.generateRoute,
+          ),
+        );
       },
     );
   }
