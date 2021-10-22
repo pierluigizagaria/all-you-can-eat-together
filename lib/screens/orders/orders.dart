@@ -3,10 +3,12 @@ import 'package:allyoucaneattogether/models/order.dart';
 import 'package:allyoucaneattogether/screens/orders/order_edit_form.dart';
 import 'package:allyoucaneattogether/repository/groups.dart';
 import 'package:allyoucaneattogether/repository/orders.dart';
-import 'package:allyoucaneattogether/screens/home/order_list.dart';
+import 'package:allyoucaneattogether/screens/orders/order_list.dart';
+import 'package:allyoucaneattogether/screens/table_qr_code_viewer.dart';
 import 'package:allyoucaneattogether/utils/safe_modal_bottom_sheet.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:qr_flutter/qr_flutter.dart';
 
 class OrdersScreen extends StatefulWidget {
   static const String routeName = '/orders';
@@ -21,7 +23,7 @@ class OrdersScreen extends StatefulWidget {
   );
 
   OrdersScreen({Key? key, required group, required order})
-      : _stream = GroupRepository().getGroupStream(group),
+      : _stream = GroupRepository().stream(group),
         _group = group,
         _order = order,
         super(key: key);
@@ -39,6 +41,35 @@ class _OrdersScreenState extends State<OrdersScreen> {
     });
   }
 
+  void _showSettingsPanel(BuildContext context, Group group, Order order) {
+    SafeModalBottomSheet.show(
+      context: context,
+      body: OrderEditForm(group, order),
+    );
+  }
+
+  void _showQRCodePanel(BuildContext context, String code) {
+    SafeModalBottomSheet.show(
+      context: context,
+      body: SizedBox(
+        height: 250,
+        child: Center(
+          child: SizedBox(
+            height: 200,
+            child: ClipRRect(
+              borderRadius: BorderRadius.circular(16.0),
+              child: QrImage(
+                backgroundColor: Colors.white,
+                data: code,
+                version: QrVersions.auto,
+              ),
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
   @override
   void initState() {
     super.initState();
@@ -47,13 +78,6 @@ class _OrdersScreenState extends State<OrdersScreen> {
 
   @override
   Widget build(BuildContext context) {
-    void _showSettingsPanel(Group group, Order order) {
-      SafeModalBottomSheet.show(
-        context: context,
-        body: OrderEditForm(group, order),
-      );
-    }
-
     return StreamProvider<List<Order>>.value(
       initialData: const [],
       value: OrdersRepository(widget._group).orders,
@@ -73,15 +97,42 @@ class _OrdersScreenState extends State<OrdersScreen> {
               onPressed: () => Navigator.pop(context),
             ),
           ),
-          floatingActionButton: SizedBox(
-            height: 72,
-            child: FittedBox(
-              child: FloatingActionButton(
-                backgroundColor: widget._order.color,
-                onPressed: () =>
-                    _showSettingsPanel(widget._group, widget._order),
-                child: const Icon(Icons.edit),
-              ),
+          floatingActionButtonLocation:
+              FloatingActionButtonLocation.miniCenterDocked,
+          floatingActionButton: Padding(
+            padding: const EdgeInsets.all(16),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                SizedBox(
+                  height: 72,
+                  child: FittedBox(
+                    child: FloatingActionButton(
+                      heroTag: 'qrCodeActionButton',
+                      backgroundColor: widget._order.color,
+                      onPressed: () {
+                        _showQRCodePanel(context, widget._group.code);
+                      },
+                      child: const Icon(Icons.qr_code_rounded),
+                    ),
+                  ),
+                ),
+                SizedBox(
+                  height: 72,
+                  child: FittedBox(
+                    child: FloatingActionButton(
+                      heroTag: 'editActionButton',
+                      backgroundColor: widget._order.color,
+                      onPressed: () => _showSettingsPanel(
+                        context,
+                        widget._group,
+                        widget._order,
+                      ),
+                      child: const Icon(Icons.edit),
+                    ),
+                  ),
+                ),
+              ],
             ),
           ),
           body: const OrdersList(),
