@@ -1,17 +1,19 @@
-import 'package:allyoucaneattogether/models/user.dart' as m;
+import 'package:allyoucaneattogether/models/user.dart' as app;
 import 'package:firebase_auth/firebase_auth.dart';
 
 class AuthService {
   final FirebaseAuth _auth = FirebaseAuth.instance;
 
-  m.User? _userFromFirebaseUser(User? user) =>
-      user != null ? m.User(uid: user.uid, name: user.displayName ?? '') : null;
+  app.User? _userFromFirebaseUser(User? user) => user != null
+      ? app.User(uid: user.uid, name: user.displayName ?? '')
+      : null;
 
-  m.User? signedUser() => _userFromFirebaseUser(_auth.currentUser);
+  app.User? get user => _userFromFirebaseUser(_auth.currentUser);
 
-  Stream<m.User?> get user => _auth.userChanges().map(_userFromFirebaseUser);
+  Stream<app.User?> get stream =>
+      _auth.userChanges().map(_userFromFirebaseUser);
 
-  Future<m.User?> signInAnonimously() async {
+  Future<app.User?> signInAnonimously() async {
     try {
       UserCredential result = await _auth.signInAnonymously();
       return _userFromFirebaseUser(result.user);

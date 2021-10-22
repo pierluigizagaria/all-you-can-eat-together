@@ -36,8 +36,8 @@ class App extends StatelessWidget {
       },
       onDidInitilize: (context) {
         return StreamProvider<User?>.value(
-          initialData: AuthService().signedUser(),
-          value: AuthService().user,
+          initialData: AuthService().user,
+          value: AuthService().stream,
           updateShouldNotify: (previous, current) {
             return current?.uid != previous?.uid;
           },

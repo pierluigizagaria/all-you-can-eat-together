@@ -25,7 +25,7 @@ class _FirebaseInitializerState extends State<FirebaseInitializer> {
   void initializeFlutterFire() async {
     try {
       await Firebase.initializeApp();
-      if (AuthService().signedUser() == null) {
+      if (AuthService().user == null) {
         await AuthService().signInAnonimously();
       }
       setState(() => _initialized = true);
