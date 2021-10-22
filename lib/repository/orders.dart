@@ -12,9 +12,9 @@ class OrdersRepository {
             .doc(group.uid)
             .collection('orders');
 
-  Future<List<Order>> getOrdersByUser(User user) {
+  Future<List<Order>> findUserOrders(User user) {
     return _collection
-        .where('user', isEqualTo: user.uid)
+        .where('user.uid', isEqualTo: user.uid)
         .get()
         .then((query) => query.docs.map((e) => Order.fromSnapshot(e)).toList());
   }

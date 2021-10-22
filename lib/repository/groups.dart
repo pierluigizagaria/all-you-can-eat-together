@@ -20,7 +20,7 @@ class GroupRepository {
     return _collection.doc(group.uid).delete();
   }
 
-  Future<Group?> getGroupByCode(String code) {
+  Future<Group?> findGroup(String code) {
     return _collection
         .where('code', isEqualTo: code)
         .limit(1)
@@ -31,7 +31,7 @@ class GroupRepository {
     });
   }
 
-  Stream<Group?> getGroupStream(Group group) {
+  Stream<Group?> stream(Group group) {
     return _collection
         .doc(group.uid)
         .snapshots()
