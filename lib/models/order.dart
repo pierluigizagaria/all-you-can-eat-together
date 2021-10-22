@@ -23,7 +23,7 @@ class Order {
   static Order _orderFromJson(String uid, Map<String, dynamic> json) {
     return Order(
       uid: uid,
-      user: User(uid: json['user']),
+      user: User.fromJson(json['user']),
       color: Color(json['color'] as int),
       items: List.castFrom(json['items']),
     );
@@ -32,7 +32,7 @@ class Order {
   Map<String, dynamic> toJson() => _orderToJson(this);
 
   Map<String, dynamic> _orderToJson(Order instance) => <String, dynamic>{
-        'user': instance.user.uid,
+        'user': instance.user.toJson(),
         'color': instance.color.value,
         'items': instance.items,
       };
