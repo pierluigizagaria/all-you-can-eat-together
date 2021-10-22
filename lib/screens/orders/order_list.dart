@@ -1,6 +1,6 @@
 import 'package:allyoucaneattogether/models/order.dart';
 import 'package:flutter/material.dart';
-import 'package:allyoucaneattogether/screens/home/order_tile.dart';
+import 'package:allyoucaneattogether/screens/orders/order_tile.dart';
 import 'package:provider/provider.dart';
 
 class OrdersList extends StatelessWidget {
