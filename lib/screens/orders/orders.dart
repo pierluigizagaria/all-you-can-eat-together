@@ -4,7 +4,6 @@ import 'package:allyoucaneattogether/screens/orders/order_edit_form.dart';
 import 'package:allyoucaneattogether/repository/groups.dart';
 import 'package:allyoucaneattogether/repository/orders.dart';
 import 'package:allyoucaneattogether/screens/orders/order_list.dart';
-import 'package:allyoucaneattogether/screens/table_qr_code_viewer.dart';
 import 'package:allyoucaneattogether/utils/safe_modal_bottom_sheet.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -110,9 +109,8 @@ class _OrdersScreenState extends State<OrdersScreen> {
                     child: FloatingActionButton(
                       heroTag: 'qrCodeActionButton',
                       backgroundColor: widget._order.color,
-                      onPressed: () {
-                        _showQRCodePanel(context, widget._group.code);
-                      },
+                      onPressed: () =>
+                          _showQRCodePanel(context, widget._group.code),
                       child: const Icon(Icons.qr_code_rounded),
                     ),
                   ),
