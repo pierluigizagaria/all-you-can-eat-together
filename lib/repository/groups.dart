@@ -1,4 +1,4 @@
-import 'package:allyoucaneattogether/models/group.dart';
+import 'package:gosushi/models/group.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class GroupRepository {
@@ -32,9 +32,7 @@ class GroupRepository {
   }
 
   Stream<Group?> stream(Group group) {
-    return _collection
-        .doc(group.uid)
-        .snapshots()
-        .map((snapshot) => Group.fromSnapshot(snapshot));
+    return _collection.doc(group.uid).snapshots().map(
+        (snapshot) => snapshot.exists ? Group.fromSnapshot(snapshot) : null);
   }
 }

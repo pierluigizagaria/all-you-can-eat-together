@@ -1,4 +1,4 @@
-package it.pierluigizagaria.allyoucaneattogether
+package com.pierluigizagaria.gosushi
 
 import io.flutter.embedding.android.FlutterActivity
 

@@ -1,4 +1,4 @@
-import 'package:allyoucaneattogether/models/user.dart';
+import 'package:gosushi/models/user.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 

@@ -1,8 +1,8 @@
-import 'package:allyoucaneattogether/models/group.dart';
-import 'package:allyoucaneattogether/models/order.dart';
-import 'package:allyoucaneattogether/screens/home/home.dart';
-import 'package:allyoucaneattogether/screens/orders/orders.dart';
-import 'package:allyoucaneattogether/screens/table_qr_code_scanner.dart';
+import 'package:gosushi/models/group.dart';
+import 'package:gosushi/models/order.dart';
+import 'package:gosushi/screens/home/home.dart';
+import 'package:gosushi/screens/orders/orders.dart';
+import 'package:gosushi/screens/table_qr_code_scanner.dart';
 import 'package:flutter/material.dart';
 
 abstract class AppRouter {

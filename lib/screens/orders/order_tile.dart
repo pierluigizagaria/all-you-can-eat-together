@@ -1,4 +1,4 @@
-import 'package:allyoucaneattogether/models/order.dart';
+import 'package:gosushi/models/order.dart';
 import 'package:flutter/material.dart';
 
 class OrderTile extends StatefulWidget {

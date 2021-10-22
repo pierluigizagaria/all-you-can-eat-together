@@ -1,6 +1,6 @@
-import 'package:allyoucaneattogether/models/order.dart';
+import 'package:gosushi/models/order.dart';
 import 'package:flutter/material.dart';
-import 'package:allyoucaneattogether/screens/orders/order_tile.dart';
+import 'package:gosushi/screens/orders/order_tile.dart';
 import 'package:provider/provider.dart';
 
 class OrdersList extends StatelessWidget {

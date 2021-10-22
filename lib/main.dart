@@ -1,9 +1,9 @@
-import 'package:allyoucaneattogether/models/user.dart';
-import 'package:allyoucaneattogether/pages/loading.dart';
-import 'package:allyoucaneattogether/router.dart';
-import 'package:allyoucaneattogether/services/auth.dart';
-import 'package:allyoucaneattogether/themes.dart';
-import 'package:allyoucaneattogether/widgets/flutter_initializer.dart';
+import 'package:gosushi/models/user.dart';
+import 'package:gosushi/pages/loading.dart';
+import 'package:gosushi/router.dart';
+import 'package:gosushi/services/auth.dart';
+import 'package:gosushi/themes.dart';
+import 'package:gosushi/widgets/flutter_initializer.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 

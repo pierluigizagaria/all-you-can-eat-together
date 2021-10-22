@@ -1,5 +1,5 @@
-import 'package:allyoucaneattogether/models/order.dart';
-import 'package:allyoucaneattogether/repository/orders.dart';
+import 'package:gosushi/models/order.dart';
+import 'package:gosushi/repository/orders.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 

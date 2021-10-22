@@ -1,4 +1,4 @@
-import 'package:allyoucaneattogether/services/auth.dart';
+import 'package:gosushi/services/auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 

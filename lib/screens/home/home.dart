@@ -1,11 +1,12 @@
-import 'package:allyoucaneattogether/models/group.dart';
-import 'package:allyoucaneattogether/models/order.dart';
-import 'package:allyoucaneattogether/models/user.dart';
-import 'package:allyoucaneattogether/repository/groups.dart';
-import 'package:allyoucaneattogether/repository/orders.dart';
-import 'package:allyoucaneattogether/screens/orders/orders.dart';
-import 'package:allyoucaneattogether/screens/table_qr_code_scanner.dart';
+import 'package:gosushi/models/group.dart';
+import 'package:gosushi/models/order.dart';
+import 'package:gosushi/models/user.dart';
+import 'package:gosushi/repository/groups.dart';
+import 'package:gosushi/repository/orders.dart';
+import 'package:gosushi/screens/orders/orders.dart';
+import 'package:gosushi/screens/table_qr_code_scanner.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter/material.dart';
 import 'package:random_color/random_color.dart';
@@ -114,12 +115,12 @@ class _HomeScreenState extends State<HomeScreen> {
         body: Center(
           child: Form(
             key: _formKey,
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                SizedBox(
-                  width: 280,
-                  child: TextFormField(
+            child: SizedBox(
+              width: 280,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  TextFormField(
                     focusNode: _nameFieldFocusNode,
                     maxLength: 16,
                     controller: _nameFieldController,
@@ -136,37 +137,45 @@ class _HomeScreenState extends State<HomeScreen> {
                       return null;
                     },
                   ),
-                ),
-                const SizedBox(height: 16),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    SizedBox(
-                      width: 136,
-                      child: ElevatedButton(
-                        onPressed: _creatingTable
-                            ? null
-                            : () {
-                                _onCreateTableButtonPress(context);
-                              },
-                        child: const Text('Crea'),
+                  const SizedBox(height: 16),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Expanded(
+                        child: ElevatedButton(
+                          onPressed: _creatingTable
+                              ? () {}
+                              : () {
+                                  _onCreateTableButtonPress(context);
+                                },
+                          child: !_creatingTable
+                              ? const Text('Crea')
+                              : const SpinKitRing(
+                                  color: Colors.white,
+                                  lineWidth: 3,
+                                  size: 20,
+                                ),
+                        ),
                       ),
-                    ),
-                    const SizedBox(width: 12),
-                    SizedBox(
-                      width: 136,
-                      child: ElevatedButton(
-                        onPressed: _creatingTable
-                            ? null
-                            : () {
-                                _onJoinTableButtonPress(context);
-                              },
-                        child: const Text('Unisciti'),
+                      const SizedBox(width: 12),
+                      Expanded(
+                        child: AnimatedOpacity(
+                          duration: const Duration(milliseconds: 250),
+                          opacity: !_creatingTable ? 1.0 : 0.0,
+                          child: ElevatedButton(
+                            onPressed: _creatingTable
+                                ? null
+                                : () {
+                                    _onJoinTableButtonPress(context);
+                                  },
+                            child: const Text('Unisciti'),
+                          ),
+                        ),
                       ),
-                    ),
-                  ],
-                ),
-              ],
+                    ],
+                  ),
+                ],
+              ),
             ),
           ),
         ),

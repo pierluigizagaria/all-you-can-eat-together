@@ -1,4 +1,4 @@
-# allyoucaneattogether
+# gosushi
 
 A new Flutter project.
 

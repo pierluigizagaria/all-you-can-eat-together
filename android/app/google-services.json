@@ -7,9 +7,9 @@
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:1001091297631:android:dc3ef4838a395dbb65c6ea",
+        "mobilesdk_app_id": "1:1001091297631:android:6e6e4ff3b86ccb1d65c6ea",
         "android_client_info": {
-          "package_name": "it.pierluigizagaria.allyoucaneattogether"
+          "package_name": "com.pierluigizagaria.gosushi"
         }
       },
       "oauth_client": [

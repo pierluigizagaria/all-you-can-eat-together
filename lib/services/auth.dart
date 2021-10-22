@@ -1,4 +1,4 @@
-import 'package:allyoucaneattogether/models/user.dart' as app;
+import 'package:gosushi/models/user.dart' as app;
 import 'package:firebase_auth/firebase_auth.dart';
 
 class AuthService {

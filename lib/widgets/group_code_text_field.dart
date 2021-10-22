@@ -1,9 +1,9 @@
-import 'package:allyoucaneattogether/models/group.dart';
-import 'package:allyoucaneattogether/models/order.dart';
-import 'package:allyoucaneattogether/models/user.dart';
-import 'package:allyoucaneattogether/repository/groups.dart';
-import 'package:allyoucaneattogether/repository/orders.dart';
-import 'package:allyoucaneattogether/screens/orders/orders.dart';
+import 'package:gosushi/models/group.dart';
+import 'package:gosushi/models/order.dart';
+import 'package:gosushi/models/user.dart';
+import 'package:gosushi/repository/groups.dart';
+import 'package:gosushi/repository/orders.dart';
+import 'package:gosushi/screens/orders/orders.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
@@ -26,35 +26,32 @@ class _GroupCodeTextFieldState extends State<GroupCodeTextField> {
   }
 
   Future<Order> getOrderOrCreate(Group group, User user) async {
-    List<Order> userOrders =
-        await OrdersRepository(group).getOrdersByUser(user);
+    List<Order> userOrders = await OrdersRepository(group).findUserOrders(user);
 
     if (userOrders.isNotEmpty) return userOrders.first;
 
-    Order newOrder = await addOrderToGroup(
-      group,
-      user,
-      RandomColor().randomColor(
-        colorSaturation: ColorSaturation.highSaturation,
-        colorBrightness: ColorBrightness.dark,
-      ),
+    Color randomColor = RandomColor().randomColor(
+      colorSaturation: ColorSaturation.highSaturation,
+      colorBrightness: ColorBrightness.dark,
     );
-    return newOrder;
+
+    return await addOrderToGroup(group, user, randomColor);
   }
 
   @override
   Widget build(BuildContext context) {
-    User? user = Provider.of<User?>(context);
-
     return TextField(
-      style: const TextStyle(fontSize: 32),
-      textAlign: TextAlign.center,
+      style: const TextStyle(fontSize: 16),
       maxLength: Group.codeLength,
       textCapitalization: TextCapitalization.characters,
       inputFormatters: [
         FilteringTextInputFormatter.allow(RegExp('^[a-zA-Z0-9]*')),
       ],
-      decoration: InputDecoration(errorText: _error, counterText: ''),
+      decoration: InputDecoration(
+        labelText: 'Codice gruppo',
+        errorText: _error,
+        counterText: '',
+      ),
       onChanged: (value) async {
         if (value == _oldInputValue) {
           return;
@@ -66,12 +63,13 @@ class _GroupCodeTextFieldState extends State<GroupCodeTextField> {
         }
         if (value.length < Group.codeLength) return;
 
+        User? user = Provider.of<User?>(context);
         if (user == null) {
           setState(() => _error = 'Errore');
           return;
         }
 
-        Group? group = await GroupRepository().getGroupByCode(value);
+        Group? group = await GroupRepository().findGroup(value);
         if (group == null) {
           setState(() => _error = 'Il gruppo non esiste');
           return;

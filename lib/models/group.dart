@@ -1,5 +1,5 @@
-import 'package:allyoucaneattogether/models/order.dart';
-import 'package:allyoucaneattogether/utils/random_string.dart';
+import 'package:gosushi/models/order.dart';
+import 'package:gosushi/utils/random_string.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class Group {
