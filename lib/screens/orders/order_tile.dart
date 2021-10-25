@@ -41,7 +41,7 @@ class _OrderTileState extends State<OrderTile> {
                     padding: const EdgeInsets.only(bottom: 8),
                     child: Text(
                       widget._order.user.name,
-                      style: TextStyle(fontSize: 18),
+                      style: const TextStyle(fontSize: 18),
                     ),
                   ),
                   Wrap(

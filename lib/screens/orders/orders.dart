@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'package:gosushi/models/group.dart';
 import 'package:gosushi/models/order.dart';
+import 'package:gosushi/screens/home/home.dart';
 import 'package:gosushi/screens/orders/order_edit_form.dart';
 import 'package:gosushi/repository/groups.dart';
 import 'package:gosushi/repository/orders.dart';
@@ -39,7 +40,7 @@ class _OrdersScreenState extends State<OrdersScreen> {
     _streamSubscription = widget._stream.listen((event) {
       if (event != null) return;
       ScaffoldMessenger.of(context).showSnackBar(widget._snackBarError);
-      Navigator.pop(context);
+      Navigator.popUntil(context, ModalRoute.withName(HomeScreen.routeName));
     });
   }
 
@@ -73,12 +74,21 @@ class _OrdersScreenState extends State<OrdersScreen> {
   }
 
   void _showOrdersAlertDialog(BuildContext context) {
+    final _orders = Provider.of<List<Order>>(context);
+
+    List<int> mergedOrdersItems = widget._group.orders
+        .map((order1) => order1.items)
+        .toList()
+        .expand((x) => x)
+        .toList();
+
     showDialog(
       context: context,
       builder: (BuildContext context) {
-        return const AlertDialog(
-          title: Text("Comanda"),
-          content: null,
+        return AlertDialog(
+          scrollable: true,
+          title: const Text("Comanda"),
+          content: Center(),
         );
       },
     );
@@ -111,7 +121,7 @@ class _OrdersScreenState extends State<OrdersScreen> {
           ),
           actions: <Widget>[
             IconButton(
-              icon: const Icon(Icons.list_alt_rounded, color: Colors.white),
+              icon: const Icon(Icons.list_rounded),
               onPressed: () => _showOrdersAlertDialog(context),
             )
           ],
