@@ -23,15 +23,15 @@ class App extends StatelessWidget {
       onError: (context) {
         return MaterialApp(
           title: 'Flutter Demo',
-          theme: Themes.lightTheme,
-          home: Loading(),
+          theme: Themes.light,
+          home: const Loading(),
         );
       },
       onLoading: (context) {
         return MaterialApp(
           title: 'Flutter Demo',
-          theme: Themes.lightTheme,
-          home: Loading(),
+          theme: Themes.light,
+          home: const Loading(),
         );
       },
       onDidInitilize: (context) {
@@ -43,8 +43,8 @@ class App extends StatelessWidget {
           },
           child: MaterialApp(
             title: 'Flutter Demo',
-            theme: Themes.lightTheme,
-            darkTheme: Themes.darkTheme,
+            theme: Themes.light,
+            darkTheme: Themes.dark,
             themeMode: ThemeMode.system,
             navigatorKey: _navigatorKey,
             onGenerateRoute: AppRouter.generateRoute,

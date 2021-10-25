@@ -112,37 +112,55 @@ class _HomeScreenState extends State<HomeScreen> {
         }
       },
       child: Scaffold(
-        body: Center(
-          child: Form(
-            key: _formKey,
-            child: SizedBox(
-              width: 280,
+        body: Align(
+          alignment: Alignment.topCenter,
+          child: SingleChildScrollView(
+            child: Form(
+              key: _formKey,
               child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  TextFormField(
-                    focusNode: _nameFieldFocusNode,
-                    maxLength: 16,
-                    controller: _nameFieldController,
-                    style: const TextStyle(fontSize: 16),
-                    textCapitalization: TextCapitalization.sentences,
-                    decoration: const InputDecoration(
-                      labelText: 'Come ti chiami?',
-                      alignLabelWithHint: true,
+                  Container(
+                    color: Colors.red,
+                    child: Padding(
+                      padding: EdgeInsets.only(
+                          top: MediaQuery.of(context).padding.top),
+                      child: Stack(
+                        alignment: Alignment.center,
+                        children: const <Widget>[
+                          AspectRatio(aspectRatio: 1),
+                          Image(
+                            width: 280,
+                            image: AssetImage('assets/splash/splash.png'),
+                          ),
+                        ],
+                      ),
                     ),
-                    validator: (value) {
-                      if (value == null || value.isEmpty) {
-                        return 'Inserisci il tuo nome';
-                      }
-                      return null;
-                    },
                   ),
-                  const SizedBox(height: 16),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Expanded(
-                        child: ElevatedButton(
+                  SizedBox(
+                    width: 280,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        TextFormField(
+                          focusNode: _nameFieldFocusNode,
+                          maxLength: 16,
+                          controller: _nameFieldController,
+                          style: const TextStyle(fontSize: 16),
+                          textCapitalization: TextCapitalization.sentences,
+                          decoration: const InputDecoration(
+                            labelText: 'Come ti chiami?',
+                            alignLabelWithHint: true,
+                          ),
+                          validator: (value) {
+                            if (value == null || value.isEmpty) {
+                              return 'Inserisci il tuo nome';
+                            }
+                            return null;
+                          },
+                        ),
+                        const SizedBox(height: 16),
+                        ElevatedButton(
                           onPressed: _creatingTable
                               ? () {}
                               : () {
@@ -156,10 +174,8 @@ class _HomeScreenState extends State<HomeScreen> {
                                   size: 20,
                                 ),
                         ),
-                      ),
-                      const SizedBox(width: 12),
-                      Expanded(
-                        child: AnimatedOpacity(
+                        const SizedBox(width: 12),
+                        AnimatedOpacity(
                           duration: const Duration(milliseconds: 250),
                           opacity: !_creatingTable ? 1.0 : 0.0,
                           child: ElevatedButton(
@@ -171,8 +187,8 @@ class _HomeScreenState extends State<HomeScreen> {
                             child: const Text('Unisciti'),
                           ),
                         ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
                 ],
               ),
