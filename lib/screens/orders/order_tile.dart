@@ -1,7 +1,7 @@
 import 'package:gosushi/models/order.dart';
 import 'package:flutter/material.dart';
 
-class OrderTile extends StatefulWidget {
+class OrderTile extends StatelessWidget {
   final Order _order;
 
   const OrderTile({Key? key, required order})
@@ -9,13 +9,8 @@ class OrderTile extends StatefulWidget {
         super(key: key);
 
   @override
-  _OrderTileState createState() => _OrderTileState();
-}
-
-class _OrderTileState extends State<OrderTile> {
-  @override
   Widget build(BuildContext context) {
-    widget._order.items.sort();
+    _order.items.sort();
     return Container(
       margin: const EdgeInsets.fromLTRB(12, 12, 12, 0),
       child: Row(
@@ -24,7 +19,7 @@ class _OrderTileState extends State<OrderTile> {
         children: [
           CircleAvatar(
             radius: 34,
-            backgroundColor: widget._order.color,
+            backgroundColor: _order.color,
             child: const Icon(
               Icons.person_rounded,
               color: Colors.white,
@@ -40,7 +35,7 @@ class _OrderTileState extends State<OrderTile> {
                   Padding(
                     padding: const EdgeInsets.only(bottom: 8),
                     child: Text(
-                      widget._order.user.name,
+                      _order.user.name,
                       style: const TextStyle(fontSize: 18),
                     ),
                   ),
@@ -48,19 +43,17 @@ class _OrderTileState extends State<OrderTile> {
                     spacing: 4,
                     runSpacing: 4,
                     children: List<Widget>.generate(
-                      widget._order.items.length,
+                      _order.items.length,
                       (int index) {
                         return Chip(
                           labelStyle: const TextStyle(
                             fontSize: 18,
                             color: Colors.white,
                           ),
-                          backgroundColor: widget._order.color,
+                          backgroundColor: _order.color,
                           materialTapTargetSize:
                               MaterialTapTargetSize.shrinkWrap,
-                          label: Text(
-                            widget._order.items[index].toString(),
-                          ),
+                          label: Text(_order.items[index].toString()),
                         );
                       },
                     ),
