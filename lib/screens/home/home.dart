@@ -120,7 +120,7 @@ class _HomeScreenState extends State<HomeScreen> {
               child: Column(
                 children: [
                   Container(
-                    color: Colors.red,
+                    color: Theme.of(context).primaryColor,
                     child: Padding(
                       padding: EdgeInsets.only(
                           top: MediaQuery.of(context).padding.top),
@@ -168,8 +168,9 @@ class _HomeScreenState extends State<HomeScreen> {
                                 },
                           child: !_creatingTable
                               ? const Text('Crea')
-                              : const SpinKitRing(
-                                  color: Colors.white,
+                              : SpinKitRing(
+                                  color:
+                                      Theme.of(context).colorScheme.onPrimary,
                                   lineWidth: 3,
                                   size: 20,
                                 ),
