@@ -22,14 +22,14 @@ class App extends StatelessWidget {
     return FirebaseInitializer(
       onError: (context) {
         return MaterialApp(
-          title: 'GoSushi',
+          title: 'Flutter Demo',
           theme: Themes.light,
           home: const Loading(),
         );
       },
       onLoading: (context) {
         return MaterialApp(
-          title: 'GoSushi',
+          title: 'Flutter Demo',
           theme: Themes.light,
           home: const Loading(),
         );
@@ -38,9 +38,11 @@ class App extends StatelessWidget {
         return StreamProvider<User?>.value(
           initialData: AuthService().user,
           value: AuthService().stream,
-          updateShouldNotify: (prev, curr) => curr?.uid != prev?.uid,
+          updateShouldNotify: (previous, current) {
+            return current?.uid != previous?.uid;
+          },
           child: MaterialApp(
-            title: 'GoSushi',
+            title: 'Flutter Demo',
             theme: Themes.light,
             darkTheme: Themes.dark,
             themeMode: ThemeMode.system,
