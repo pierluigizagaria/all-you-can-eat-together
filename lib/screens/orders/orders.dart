@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:gosushi/models/group.dart';
 import 'package:gosushi/models/order.dart';
 import 'package:gosushi/screens/home/home.dart';
@@ -6,6 +7,7 @@ import 'package:gosushi/screens/orders/order_edit_form.dart';
 import 'package:gosushi/repository/groups.dart';
 import 'package:gosushi/repository/orders.dart';
 import 'package:gosushi/screens/orders/order_list.dart';
+import 'package:gosushi/screens/orders/order_merge_list.dart';
 import 'package:gosushi/utils/safe_modal_bottom_sheet.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -14,7 +16,8 @@ import 'package:qr_flutter/qr_flutter.dart';
 class OrdersScreen extends StatefulWidget {
   static const String routeName = '/orders';
 
-  final Stream<Group?> _stream;
+  final Stream<Group?> _groupStream;
+  final Stream<List<Order>> _ordersStream;
   final Group _group;
   final Order _order;
 
@@ -24,9 +27,10 @@ class OrdersScreen extends StatefulWidget {
   );
 
   OrdersScreen({Key? key, required group, required order})
-      : _stream = GroupRepository().stream(group),
-        _group = group,
+      : _group = group,
         _order = order,
+        _groupStream = GroupRepository().stream(group),
+        _ordersStream = OrdersRepository(group).orders,
         super(key: key);
 
   @override
@@ -37,7 +41,7 @@ class _OrdersScreenState extends State<OrdersScreen> {
   late StreamSubscription _streamSubscription;
 
   void popOnGroupNull() {
-    _streamSubscription = widget._stream.listen((event) {
+    _streamSubscription = widget._groupStream.listen((event) {
       if (event != null) return;
       ScaffoldMessenger.of(context).showSnackBar(widget._snackBarError);
       Navigator.popUntil(context, ModalRoute.withName(HomeScreen.routeName));
@@ -74,21 +78,37 @@ class _OrdersScreenState extends State<OrdersScreen> {
   }
 
   void _showOrdersAlertDialog(BuildContext context) {
-    final _orders = Provider.of<List<Order>>(context);
-
-    List<int> mergedOrdersItems = widget._group.orders
-        .map((order1) => order1.items)
-        .toList()
-        .expand((x) => x)
-        .toList();
-
     showDialog(
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
           scrollable: true,
-          title: const Text("Comanda"),
-          content: Center(),
+          title: const Text('Ordine'),
+          content: StreamBuilder<List<Order>>(
+            initialData: const [],
+            stream: OrdersRepository(widget._group).orders,
+            builder: (context, snapshot) {
+              switch (snapshot.connectionState) {
+                case ConnectionState.waiting:
+                  return const SpinKitRing(color: Colors.white);
+                case ConnectionState.active:
+                  List<int> mergedOrdersItems = snapshot.data!
+                      .map((order) => order.items)
+                      .toList()
+                      .expand((items) => items)
+                      .toList();
+                  Map<int, int> itemsCount = {
+                    for (int item in mergedOrdersItems)
+                      item: mergedOrdersItems
+                          .where((element) => element == item)
+                          .length
+                  };
+                  return OrderMergeList(items: itemsCount);
+                default:
+                  return const Text('Non è stato possibile gestire gli ordini');
+              }
+            },
+          ),
         );
       },
     );
@@ -108,9 +128,9 @@ class _OrdersScreenState extends State<OrdersScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return StreamProvider<List<Order>?>.value(
+    return StreamProvider<List<Order>>.value(
       initialData: const [],
-      value: OrdersRepository(widget._group).orders,
+      value: widget._ordersStream,
       child: Scaffold(
         resizeToAvoidBottomInset: false,
         appBar: AppBar(
@@ -138,8 +158,10 @@ class _OrdersScreenState extends State<OrdersScreen> {
                 child: FittedBox(
                   child: FloatingActionButton(
                     heroTag: 'qrCodeActionButton',
-                    onPressed: () =>
-                        _showQRCodePanel(context, widget._group.code),
+                    onPressed: () => _showQRCodePanel(
+                      context,
+                      widget._group.code,
+                    ),
                     child: const Icon(Icons.qr_code_rounded),
                   ),
                 ),
