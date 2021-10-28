@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'package:gosushi/models/group.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:qr_code_scanner/qr_code_scanner.dart';
 
 class TableQRCodeScannerScreen extends StatefulWidget {
@@ -48,6 +49,15 @@ class _TableQRCodeScannerScreenState extends State<TableQRCodeScannerScreen> {
   }
 
   @override
+  void initState() {
+    super.initState();
+    SystemChrome.setPreferredOrientations([
+      DeviceOrientation.landscapeRight,
+      DeviceOrientation.landscapeLeft,
+    ]);
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       resizeToAvoidBottomInset: false,
@@ -82,6 +92,12 @@ class _TableQRCodeScannerScreenState extends State<TableQRCodeScannerScreen> {
   @override
   void dispose() {
     controller?.dispose();
+    SystemChrome.setPreferredOrientations([
+      DeviceOrientation.landscapeRight,
+      DeviceOrientation.landscapeLeft,
+      DeviceOrientation.portraitUp,
+      DeviceOrientation.portraitDown,
+    ]);
     super.dispose();
   }
 }
