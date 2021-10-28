@@ -11,6 +11,10 @@ class OrderTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     _order.items.sort();
+    Map<int, int> countedItems = {
+      for (int item in _order.items)
+        item: _order.items.where((element) => element == item).length
+    };
     return Container(
       margin: const EdgeInsets.fromLTRB(12, 12, 12, 0),
       child: Row(
@@ -43,8 +47,9 @@ class OrderTile extends StatelessWidget {
                     spacing: 4,
                     runSpacing: 4,
                     children: List<Widget>.generate(
-                      _order.items.length,
+                      countedItems.length,
                       (int index) {
+                        int key = countedItems.keys.elementAt(index);
                         return Chip(
                           labelStyle: const TextStyle(
                             fontSize: 18,
@@ -53,7 +58,9 @@ class OrderTile extends StatelessWidget {
                           backgroundColor: _order.color,
                           materialTapTargetSize:
                               MaterialTapTargetSize.shrinkWrap,
-                          label: Text(_order.items[index].toString()),
+                          label: Text(countedItems[key]! > 1
+                              ? '${key.toString()} x ${countedItems[key].toString()}'
+                              : key.toString()),
                         );
                       },
                     ),

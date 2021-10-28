@@ -31,8 +31,8 @@ class _OrderEditFormState extends State<OrderEditForm> {
     widget._orderRepository.update(widget._order);
   }
 
-  void removeChip(int index) {
-    _items.removeAt(index);
+  void _deleteItem(int value) {
+    _items.remove(value);
     notifyUpdate();
     setState(() => _items);
   }
@@ -45,17 +45,21 @@ class _OrderEditFormState extends State<OrderEditForm> {
   }
 
   List<Widget> chipsList() {
+    Map<int, int> countedItems = {
+      for (int item in _items)
+        item: _items.where((element) => element == item).length
+    };
     return List<Widget>.generate(
-      _items.length,
+      countedItems.length,
       (int index) {
+        int key = countedItems.keys.elementAt(index);
         return RawChip(
-          labelStyle: const TextStyle(fontSize: 18),
           materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
-          onDeleted: () => removeChip(index),
-          onPressed: () => removeChip(index),
-          label: Text(
-            _items[index].toString(),
-          ),
+          onDeleted: () => _deleteItem(key),
+          onPressed: () => _deleteItem(key),
+          label: Text(countedItems[key]! > 1
+              ? '${key.toString()} x ${countedItems[key].toString()}'
+              : key.toString()),
         );
       },
     );
