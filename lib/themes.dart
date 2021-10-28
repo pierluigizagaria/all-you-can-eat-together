@@ -18,6 +18,11 @@ abstract class Themes {
       brightness: Brightness.dark,
     ),
   ).copyWith(
+    pageTransitionsTheme: const PageTransitionsTheme(
+      builders: {
+        TargetPlatform.android: ZoomPageTransitionsBuilder(),
+      },
+    ),
     appBarTheme: const AppBarTheme(elevation: 0),
     bottomSheetTheme: const BottomSheetThemeData(
       backgroundColor: Color(0xFF191414),
