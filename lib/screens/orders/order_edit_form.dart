@@ -80,52 +80,44 @@ class _OrderEditFormState extends State<OrderEditForm> {
               color: Colors.grey,
             ),
           ),
-          Padding(
-            padding: const EdgeInsets.fromLTRB(12, 0, 12, 18),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              mainAxisSize: MainAxisSize.min,
-              children: <Widget>[
-                Container(
-                  constraints: const BoxConstraints(maxHeight: 280),
-                  padding: const EdgeInsets.fromLTRB(12, 10, 12, 0),
-                  child: RawScrollbar(
-                    radius: const Radius.circular(20),
-                    thickness: 4,
-                    isAlwaysShown: true,
-                    controller: _scrollController,
-                    child: SingleChildScrollView(
-                      reverse: true,
-                      controller: _scrollController,
-                      child: Align(
-                        alignment: Alignment.centerLeft,
-                        child: Wrap(
-                          alignment: WrapAlignment.start,
-                          spacing: 4,
-                          runSpacing: 4,
-                          children: chipsList(),
-                        ),
-                      ),
+          Flexible(
+            child: Padding(
+              padding: const EdgeInsets.fromLTRB(24, 10, 24, 0),
+              child: RawScrollbar(
+                radius: const Radius.circular(20),
+                thickness: 4,
+                isAlwaysShown: true,
+                controller: _scrollController,
+                child: SingleChildScrollView(
+                  reverse: true,
+                  controller: _scrollController,
+                  child: Align(
+                    alignment: Alignment.centerLeft,
+                    child: Wrap(
+                      alignment: WrapAlignment.start,
+                      spacing: 4,
+                      runSpacing: 4,
+                      children: chipsList(),
                     ),
                   ),
                 ),
-                TextField(
-                  controller: _textEditingController,
-                  autofocus: true,
-                  keyboardType: TextInputType.number,
-                  inputFormatters: [
-                    FilteringTextInputFormatter.digitsOnly,
-                  ],
-                  onSubmitted: (value) {
-                    if (_items.length >= 30) return;
-                    _textEditingController.clear();
-                    if (int.tryParse(value) != null) {
-                      addChip(value);
-                    }
-                  },
-                  onEditingComplete: () => {},
-                ),
+              ),
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.fromLTRB(12, 0, 12, 18),
+            child: TextField(
+              controller: _textEditingController,
+              autofocus: true,
+              keyboardType: TextInputType.number,
+              inputFormatters: [
+                FilteringTextInputFormatter.digitsOnly,
               ],
+              onSubmitted: (value) {
+                _textEditingController.clear();
+                if (int.tryParse(value) != null) addChip(value);
+              },
+              onEditingComplete: () => {},
             ),
           ),
         ],
