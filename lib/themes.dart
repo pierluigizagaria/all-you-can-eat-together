@@ -1,22 +1,41 @@
 import 'package:flutter/material.dart';
 
 abstract class Themes {
-  static final ThemeData _shared = ThemeData(
-    primarySwatch: Colors.red,
-    brightness: Brightness.light,
-    pageTransitionsTheme: const PageTransitionsTheme(
-      builders: {
-        TargetPlatform.android: ZoomPageTransitionsBuilder(),
-      },
+  static final ThemeData _shared = ThemeData.from(
+    colorScheme: const ColorScheme(
+      primary: Color(0xFFE43D1C),
+      primaryVariant: Color(0xFFE43D1C),
+      secondary: Color(0xFFE43D1C),
+      secondaryVariant: Color(0xFFE43D1C),
+      surface: Color(0xFFE43D1C),
+      background: Colors.black,
+      error: Colors.red,
+      onPrimary: Colors.white,
+      onSecondary: Colors.white,
+      onSurface: Colors.white,
+      onBackground: Color(0xFFE43D1C),
+      onError: Color(0xFFE43D1C),
+      brightness: Brightness.dark,
     ),
+  ).copyWith(
+    appBarTheme: const AppBarTheme(elevation: 0),
     bottomSheetTheme: const BottomSheetThemeData(
+      backgroundColor: Color(0xFF191414),
+    ),
+    chipTheme: ChipThemeData.fromDefaults(
+      secondaryColor: const Color(0xFF191414),
+      brightness: Brightness.light,
+      labelStyle: const TextStyle(fontSize: 18),
+    ).copyWith(
       backgroundColor: Colors.white,
     ),
+    dialogBackgroundColor: const Color(0xFF191414),
   );
 
   static ThemeData get light => _shared.copyWith();
 
   static ThemeData get dark => _shared.copyWith(
+      /*
         textTheme: Typography().white,
         scaffoldBackgroundColor: Colors.black,
         bottomSheetTheme: BottomSheetThemeData(
@@ -31,6 +50,7 @@ abstract class Themes {
           ),
           counterStyle: const TextStyle(color: Colors.white),
         ),
+        */
       );
 }
 
