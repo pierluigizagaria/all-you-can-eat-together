@@ -22,14 +22,14 @@ class App extends StatelessWidget {
     return FirebaseInitializer(
       onError: (context) {
         return MaterialApp(
-          title: 'Flutter Demo',
+          title: 'GoSushi',
           theme: Themes.light,
           home: const Loading(),
         );
       },
       onLoading: (context) {
         return MaterialApp(
-          title: 'Flutter Demo',
+          title: 'GoSushi',
           theme: Themes.light,
           home: const Loading(),
         );
@@ -42,7 +42,7 @@ class App extends StatelessWidget {
             return current?.uid != previous?.uid;
           },
           child: MaterialApp(
-            title: 'Flutter Demo',
+            title: 'GoSushi',
             theme: Themes.light,
             darkTheme: Themes.dark,
             themeMode: ThemeMode.system,
